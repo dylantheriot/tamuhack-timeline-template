@@ -138,15 +138,16 @@ ul {
 
 .js .cd-h-timeline__container {
 	position: relative;
-	height: 100px;
+	height: 200px;
 	/* max-width: 800px */
+	width: 100%;
 }
 
 .js .cd-h-timeline__dates {
 	position: relative;
 	height: 100%;
-	margin: 0 40px;
-	overflow: hidden
+	margin: 0px 40px;
+	overflow-x: hidden;
 }
 
 .js .cd-h-timeline__dates::after,
@@ -171,8 +172,8 @@ ul {
 	position: absolute;
 	z-index: 1;
 	left: 0;
-	top: 49px;
-	height: 6px;
+	top: 99px;
+	height: 9px;
 	background-color: black;
 	/* background-color: hsl(var(--cd-color-3-h), var(--cd-color-3-s), calc(var(--cd-color-3-l)*0.9)); */
 	transition: -webkit-transform 0.4s;
@@ -204,9 +205,9 @@ ul {
 	-webkit-transform: translateX(-50%);
 	-ms-transform: translateX(-50%);
 	transform: translateX(-50%);
-	bottom: -20px;
-	height: 50px;
-	width: 50px;
+	bottom: -25px;
+	height: 57px;
+	width: 57px;
 	border-radius: 50%;
 	/* border-width:px; */
 	/* border-style: solid; */
@@ -214,7 +215,7 @@ ul {
 	padding: 5px;
 	background-color: hsl(0, 0%, 97%);
 	background-color: var(--cd-color-3);
-	background-size: 35px 35px;
+	background-size: 42px 42px;
 	background-repeat: no-repeat;
 	transition: background-color 0.3s, border-color .3s
 }
@@ -237,12 +238,12 @@ ul {
 }
 
 .js .cd-h-timeline__date--selected::after {
-	bottom: -40px !important;
-	height: 90px;
-	width: 90px;
+	bottom: -60px !important;
+	height: 140px;
+	width: 140px;
 	padding: 10px;
 	border: 6px solid #FF7C93;
-	background-size: 65px 65px;
+	background-size: 101px 101px;
 }
 
 .js .th::after {
@@ -267,13 +268,13 @@ ul {
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
-	height: 34px;
-	width: 34px;
+	height: 45px;
+	width: 45px;
 	border-radius: 8px;
 	border-width: 2px;
     border-style: solid;
     background: #FF7C93;
-	transition: border-color 0.3s
+	transition: border-color 0.3s;
 }
 
 .js .cd-h-timeline__navigation::after {
@@ -285,7 +286,7 @@ ul {
 	left: 50%;
 	-webkit-transform: translateX(-50%) translateY(-50%);
 	-ms-transform: translateX(-50%) translateY(-50%);
-	transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%) scale(2.0);
 	background: url(../img/cd-arrow.svg) no-repeat 0 0
 }
 
@@ -448,6 +449,11 @@ ul {
 .padding-0 {
 	padding-left: 0px !important;
 	padding-right: 0px !important;
+}
+
+.timeline-event-description {
+	margin-top: calc(10px + 5vw);
+	margin-bottom: calc(10px + 5vw);
 }
 
 @-webkit-keyframes cd-enter-right {
