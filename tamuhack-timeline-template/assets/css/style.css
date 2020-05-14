@@ -139,7 +139,7 @@ ul {
 .js .cd-h-timeline__container {
 	position: relative;
 	height: 100px;
-	max-width: 800px
+	/* max-width: 800px */
 }
 
 .js .cd-h-timeline__dates {
@@ -364,7 +364,7 @@ ul {
 }
 
 .js .cd-h-timeline__event-content {
-	max-width: 800px
+	max-width: 1000px;
 }
 
 .js .cd-h-timeline__event-title {
@@ -412,6 +412,7 @@ ul {
 	max-height: 100px;
 	max-width: 100px;
 	display:block;
+	margin-top: calc(5px + 2vw);
 	margin-left: auto;
 	margin-right: auto;
 }
