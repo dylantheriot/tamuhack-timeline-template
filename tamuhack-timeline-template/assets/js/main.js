@@ -43,7 +43,6 @@
 	    left = left + distanceNorm;
 	    timeline.date[i].setAttribute('style', 'left:' + left+'px');
 		}
-		
 		// set line/filling line dimensions
     timeline.line.style.width = (left + timeline.eventsMinDistance)+'px';
 		timeline.lineLength = left + timeline.eventsMinDistance;
