@@ -304,6 +304,12 @@
     color: #000000;
 }
 
+@media screen and (max-width: 500px) {
+    .timeline-description {
+        width: 100%;
+    }
+}
+
 .timeline-director-img {
     width: 100%;
     max-height: 100px;
