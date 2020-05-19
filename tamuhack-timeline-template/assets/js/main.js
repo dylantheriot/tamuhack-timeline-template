@@ -7,8 +7,8 @@
         this.element = element;
         this.datesContainer = this.element.getElementsByClassName('cd-h-timeline__dates')[0];
         this.line = this.datesContainer.getElementsByClassName('cd-h-timeline__line')[0]; // black line in the top timeline section
-        this.date = this.line.getElementsByClassName('cd-h-timeline__date');
-        this.selectedDate = this.line.getElementsByClassName('cd-h-timeline__date--selected')[0];
+        this.date = this.line.getElementsByClassName('cd-h-timeline__date'); // elements in the timeline
+        this.selectedDate = this.line.getElementsByClassName('cd-h-timeline__date--selected')[0]; // chosen element
         this.navigation = this.element.getElementsByClassName('cd-h-timeline__navigation');
         this.contentWrapper = this.element.getElementsByClassName('cd-h-timeline__events')[0];
         this.content = this.contentWrapper.getElementsByClassName('cd-h-timeline__event');
@@ -27,13 +27,15 @@
 
     function initTimeline(timeline) {
         // set dates left position
-        // timeline.date[0].setAttribute('style', 'left:' + '10px');
+        // first element offset
         var left = timeline.eventsDistance;
         for (var i = 0; i < timeline.date.length; i++) {
             left += timeline.eventsDistance;
+            // set offset inbetw each element
             timeline.date[i].setAttribute('style', 'left:' + left + 'px');
         }
         // set line/filling line dimensions
+        // eventsDistance * 3 for overflow on x to fill the whole line
         timeline.line.style.width = (left + timeline.eventsDistance * 3) + 'px';
         timeline.lineLength = left;
         // reveal timeline
@@ -78,7 +80,8 @@
         }
     };
 
-    function translateTimeline(timeline, direction) { // translate timeline (and date elements)
+    // translate timeline (and date elements)
+    function translateTimeline(timeline, direction) {
         var containerWidth = timeline.datesContainer.offsetWidth;
 
         var before = timeline.translate
@@ -88,7 +91,6 @@
         } else if (direction == 'prev') {
             timeline.translate += timeline.eventsDistance
         }
-
 
         // console.log("called", timeline.translate, timeline.lineLength)
 
@@ -100,12 +102,18 @@
                 if (timeline.translate * -1 + timeline.eventsDistance > timeline.lineLength) {
                     // don't let last element extend left of middle of the screen
                     timeline.translate = before;
+                    console.log(timeline.translate);
                 } else {
-                    // console.log(timeline.translate);
+                    console.log(timeline.translate);
+                    console.log(timeline.lineLength);
+                    console.log(timeline.date.length);
                     timeline.line.style.transform = 'translateX(' + timeline.translate + 'px)';
                     // update the navigation items status (toggle inactive class)
-                    (timeline.translate == 0) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
-                    (timeline.translate == containerWidth - timeline.lineLength) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
+                    // handle left side nav arrow status
+                    (timeline.translate * -1 < timeline.eventsDistance) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
+
+                    // handle right side nav arrow status
+                    (timeline.translate * -1 + timeline.eventsDistance > timeline.date.length * timeline.eventsDistance) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
                 }
             } else {
                 timeline.translate = before;
@@ -121,11 +129,12 @@
                     // left bound
                     timeline.translate = before;
                 } else {
-                    console.log(timeline.translate);
+                    // console.log(timeline.translate);
                     timeline.line.style.transform = 'translateX(' + timeline.translate + 'px)';
                     // update the navigation items status (toggle inactive class)
-                    (timeline.translate == 0) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
-                    (timeline.translate == containerWidth - timeline.lineLength) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
+                    // mobile doesn't need
+                    // (timeline.translate == 0) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
+                    // (timeline.translate == containerWidth - timeline.lineLength) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
                 }
             } else {
                 timeline.translate = before;
@@ -134,7 +143,8 @@
 
     };
 
-    function selectNewDate(timeline, target) { // ned date has been selected -> update timeline
+    // new date has been selected -> update timeline
+    function selectNewDate(timeline, target) {
         timeline.newDateIndex = Util.getIndexInArray(timeline.date, target);
         timeline.oldDateIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
         Util.removeClass(timeline.selectedDate, 'cd-h-timeline__date--selected');
@@ -181,7 +191,7 @@
     function keyNavigateTimeline(timeline, direction) {
         var newIndex = (direction == 'next') ? timeline.newDateIndex + 1 : timeline.newDateIndex - 1;
         if (newIndex < 0 || newIndex >= timeline.date.length) return;
-        console.log(newIndex);
+        // console.log(newIndex);
         selectNewDate(timeline, timeline.date[newIndex]);
         resetTimelinePosition(timeline, direction);
     };
