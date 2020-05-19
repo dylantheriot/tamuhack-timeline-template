@@ -150,17 +150,11 @@
         Util.removeClass(timeline.selectedDate, 'cd-h-timeline__date--selected');
         Util.addClass(timeline.date[timeline.newDateIndex], 'cd-h-timeline__date--selected');
         timeline.selectedDate = timeline.date[timeline.newDateIndex];
-        updateOlderEvents(timeline);
         updateVisibleContent(timeline);
     };
 
-    function updateOlderEvents(timeline) { // update older events style
-        for (var i = 0; i < timeline.date.length; i++) {
-            (i < timeline.newDateIndex) ? Util.addClass(timeline.date[i], 'cd-h-timeline__date--older-event'): Util.removeClass(timeline.date[i], 'cd-h-timeline__date--older-event');
-        }
-    };
-
-    function updateVisibleContent(timeline) { // show content of new selected date
+    // show content of new selected date
+    function updateVisibleContent(timeline) {
         if (timeline.newDateIndex > timeline.oldDateIndex) {
             var classEntering = 'cd-h-timeline__event--selected cd-h-timeline__event--enter-right',
                 classLeaving = 'cd-h-timeline__event--leave-left';
@@ -180,7 +174,8 @@
         }
     };
 
-    function resetAnimation(timeline) { // reset content classes when entering animation is over
+    // reset content classes when entering animation is over
+    function resetAnimation(timeline) {
         timeline.contentWrapper.style.height = null;
         Util.removeClass(timeline.content[timeline.newDateIndex], 'cd-h-timeline__event--enter-right cd-h-timeline__event--enter-left');
         Util.removeClass(timeline.content[timeline.oldDateIndex], 'cd-h-timeline__event--leave-right cd-h-timeline__event--leave-left');
@@ -196,7 +191,8 @@
         resetTimelinePosition(timeline, direction);
     };
 
-    function resetTimelinePosition(timeline, direction) { //translate timeline according to new selected event position
+    //translate timeline according to new selected event position
+    function resetTimelinePosition(timeline, direction) {
         var eventStyle = window.getComputedStyle(timeline.selectedDate, null),
             eventLeft = Number(eventStyle.getPropertyValue('left').replace('px', '')),
             timelineWidth = timeline.datesContainer.offsetWidth;
