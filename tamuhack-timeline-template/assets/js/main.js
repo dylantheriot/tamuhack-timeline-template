@@ -1,11 +1,12 @@
 (function() {
     // Horizontal Timeline - by CodyHouse.co
-    // find the original at 
+    // find the original at https://codyhouse.co/demo/horizontal-timeline/index.html
+
+    // timeline obj
     var HorizontalTimeline = function(element) {
         this.element = element;
         this.datesContainer = this.element.getElementsByClassName('cd-h-timeline__dates')[0];
-        this.line = this.datesContainer.getElementsByClassName('cd-h-timeline__line')[0]; // grey line in the top timeline section
-        this.fillingLine = this.datesContainer.getElementsByClassName('cd-h-timeline__filling-line')[0]; // filling line in the top timeline section  
+        this.line = this.datesContainer.getElementsByClassName('cd-h-timeline__line')[0]; // black line in the top timeline section
         this.date = this.line.getElementsByClassName('cd-h-timeline__date');
         this.selectedDate = this.line.getElementsByClassName('cd-h-timeline__date--selected')[0];
         this.navigation = this.element.getElementsByClassName('cd-h-timeline__navigation');
@@ -77,15 +78,6 @@
         }
     };
 
-    function updateFilling(timeline) { // update fillingLine scale value
-        var dateStyle = window.getComputedStyle(timeline.selectedDate, null),
-            left = dateStyle.getPropertyValue("left"),
-            width = dateStyle.getPropertyValue("width");
-
-        left = Number(left.replace('px', '')) + Number(width.replace('px', '')) / 2;
-        timeline.fillingLine.style.transform = 'scaleX(' + (left / timeline.lineLength) + ')';
-    };
-
     function translateTimeline(timeline, direction) { // translate timeline (and date elements)
         var containerWidth = timeline.datesContainer.offsetWidth;
 
@@ -150,7 +142,6 @@
         timeline.selectedDate = timeline.date[timeline.newDateIndex];
         updateOlderEvents(timeline);
         updateVisibleContent(timeline);
-        updateFilling(timeline);
     };
 
     function updateOlderEvents(timeline) { // update older events style
