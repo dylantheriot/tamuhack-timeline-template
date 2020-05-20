@@ -13,7 +13,7 @@
         this.contentWrapper = this.element.getElementsByClassName('cd-h-timeline__events')[0];
         this.content = this.contentWrapper.getElementsByClassName('cd-h-timeline__event');
 
-        this.eventsDistance = 190; // distance between events, 360 = 3 events on timeline, 190 = 5 events
+        this.eventsDistance = 190; // distance between events, 360 = 3 events on timeline, 190 = 5 events, NOTE: changing this size MAY need to reconfigure initial left in initTimeline()
         this.isDesktop = false;
         this.view = window.matchMedia("(min-width: 1024px)");
         if (this.view.matches) {
@@ -29,11 +29,15 @@
 
         initTimeline(this);
         initEvents(this);
+
     };
 
     function initTimeline(timeline) {
         // set dates left position
         // first element offset
+        // the * 2 comes from 5 elements showing, and the first element to be centered must have 2 invisi elements to the left
+        // this will change depending on timeline.eventsDistance
+        // if eventsDistance = 360, then 2 can just be 1
         var left = timeline.eventsDistance * 2;
 
         for (var i = 0; i < timeline.date.length; i++) {
@@ -56,17 +60,21 @@
         // click on arrow navigation
         self.navigation[0].addEventListener('click', function(event) {
             event.preventDefault();
-            // translateTimeline(self, 'prev');
+            // translateTimeline(self, 'prev'); // this was used to navigate without selecting new element
+            // select new element on right arrow click
             var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
             if (selectedIndex != 0) {
+                // left bounds check
                 selectNewDate(self, self.date[selectedIndex - 1]);
             }
         });
         self.navigation[1].addEventListener('click', function(event) {
             event.preventDefault();
             // translateTimeline(self, 'next');
+            // select new element on left arrow click
             var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
             if (selectedIndex != self.date.length - 1) {
+                // right bounds check
                 selectNewDate(self, self.date[selectedIndex + 1]);
             }
         });
@@ -74,10 +82,21 @@
         //swipe on timeline
         new SwipeContent(self.datesContainer);
         self.datesContainer.addEventListener('swipeLeft', function(event) {
-            translateTimeline(self, 'next');
+            // translateTimeline(self, 'next');
+            // select new element on right arrow click
+            var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
+            if (selectedIndex != 0) {
+                // left bounds check
+                selectNewDate(self, self.date[selectedIndex - 1]);
+            }
         });
         self.datesContainer.addEventListener('swipeRight', function(event) {
-            translateTimeline(self, 'prev');
+            // translateTimeline(self, 'prev');
+            var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
+            if (selectedIndex != self.date.length - 1) {
+                // right bounds check
+                selectNewDate(self, self.date[selectedIndex + 1]);
+            }
         });
 
         //select a new event
@@ -163,12 +182,13 @@
         Util.addClass(timeline.date[timeline.newDateIndex], 'cd-h-timeline__date--selected');
         timeline.selectedDate = timeline.date[timeline.newDateIndex];
         updateVisibleContent(timeline);
-        // console.log(timeline.newDateIndex);
-        // console.log(timeline.oldDateIndex);
+
+        // determine distance to translate
         var newDate = timeline.newDateIndex + 1;
         var oldDate = timeline.oldDateIndex + 1;
         var amountToTranslate = Math.abs(newDate - oldDate);
         if (timeline.newDateIndex > timeline.oldDateIndex) {
+            // moving to the right
             if (amountToTranslate === 1) {
                 translateTimeline(timeline, "next");
             } else {
@@ -177,6 +197,7 @@
                 }
             }
         } else {
+            // moving to the left
             if (amountToTranslate === 1) {
                 translateTimeline(timeline, "prev");
             } else {
@@ -237,23 +258,31 @@
         }
     };
 
-    // window.HorizontalTimeline = HorizontalTimeline;
+    window.HorizontalTimeline = HorizontalTimeline;
+    // init timeline
+    generateTimeline();
 
-    var horizontalTimeline = document.getElementsByClassName('js-cd-h-timeline'),
-        horizontalTimelineTimelineArray = [];
-    if (horizontalTimeline.length > 0) {
-        for (var i = 0; i < horizontalTimeline.length; i++) {
-            horizontalTimelineTimelineArray.push(new HorizontalTimeline(horizontalTimeline[i]));
-        }
-        // navigate the timeline when inside the viewport using the keyboard
-        document.addEventListener('keydown', function(event) {
-            if ((event.keyCode && event.keyCode == 39) || (event.key && event.key.toLowerCase() == 'arrowright')) {
-                updateHorizontalTimeline('next'); // move to next event
-            } else if ((event.keyCode && event.keyCode == 37) || (event.key && event.key.toLowerCase() == 'arrowleft')) {
-                updateHorizontalTimeline('prev'); // move to prev event
+    // to regenerate timeline on window resize
+    window.addEventListener("resize", generateTimeline);
+
+    // create the timeline
+    function generateTimeline() {
+        var horizontalTimeline = document.getElementsByClassName('js-cd-h-timeline'),
+            horizontalTimelineTimelineArray = [];
+        if (horizontalTimeline.length > 0) {
+            for (var i = 0; i < horizontalTimeline.length; i++) {
+                horizontalTimelineTimelineArray.push(new HorizontalTimeline(horizontalTimeline[i]));
             }
-        });
-    };
+            // navigate the timeline when inside the viewport using the keyboard
+            document.addEventListener('keydown', function(event) {
+                if ((event.keyCode && event.keyCode == 39) || (event.key && event.key.toLowerCase() == 'arrowright')) {
+                    updateHorizontalTimeline('next'); // move to next event
+                } else if ((event.keyCode && event.keyCode == 37) || (event.key && event.key.toLowerCase() == 'arrowleft')) {
+                    updateHorizontalTimeline('prev'); // move to prev event
+                }
+            });
+        };
+    }
 
     function updateHorizontalTimeline(direction) {
         for (var i = 0; i < horizontalTimelineTimelineArray.length; i++) {
