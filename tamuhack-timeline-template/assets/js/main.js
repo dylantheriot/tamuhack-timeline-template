@@ -13,7 +13,14 @@
         this.contentWrapper = this.element.getElementsByClassName('cd-h-timeline__events')[0];
         this.content = this.contentWrapper.getElementsByClassName('cd-h-timeline__event');
 
-        this.eventsDistance = 360; // distance between events
+        this.eventsDistance = 360; // distance between events, 360 = 3 events on timeline for tablets and smaller
+        this.isDesktop = false;
+        this.view = window.matchMedia("(min-width: 1024px)");
+        if (this.view.matches) {
+            this.eventsDistance = 200; // five on timeline for anything bigger
+            this.isDesktop = true;
+        }
+
         this.translate = 0; // this will be used to store the translate value of this.line
         this.lineLength = 0; //total length of this.line
 
@@ -29,14 +36,17 @@
         // set dates left position
         // first element offset
         var left = timeline.eventsDistance;
+        if (timeline.isDesktop) {
+            left = timeline.eventsDistance * 2;
+        }
         for (var i = 0; i < timeline.date.length; i++) {
             left += timeline.eventsDistance;
             // set offset inbetw each element
             timeline.date[i].setAttribute('style', 'left:' + left + 'px');
         }
         // set line/filling line dimensions
-        // eventsDistance * 3 for overflow on x to fill the whole line
-        timeline.line.style.width = (left + timeline.eventsDistance * 3) + 'px';
+        // eventsDistance * 5 for overflow on x to fill the whole line
+        timeline.line.style.width = (left + timeline.eventsDistance * 5) + 'px';
         timeline.lineLength = left;
         // reveal timeline
         Util.addClass(timeline.element, 'cd-h-timeline--loaded');
@@ -49,11 +59,19 @@
         // click on arrow navigation
         self.navigation[0].addEventListener('click', function(event) {
             event.preventDefault();
-            translateTimeline(self, 'prev');
+            // translateTimeline(self, 'prev');
+            var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
+            if (selectedIndex != 0) {
+                selectNewDate(self, self.date[selectedIndex - 1]);
+            }
         });
         self.navigation[1].addEventListener('click', function(event) {
             event.preventDefault();
-            translateTimeline(self, 'next');
+            // translateTimeline(self, 'next');
+            var selectedIndex = Util.getIndexInArray(timeline.date, timeline.selectedDate);
+            if (selectedIndex != self.date.length - 1) {
+                selectNewDate(self, self.date[selectedIndex + 1]);
+            }
         });
 
         //swipe on timeline
@@ -82,7 +100,7 @@
 
     // translate timeline (and date elements)
     function translateTimeline(timeline, direction) {
-        var containerWidth = timeline.datesContainer.offsetWidth;
+        // var containerWidth = timeline.datesContainer.offsetWidth;
 
         var before = timeline.translate
 
@@ -94,19 +112,16 @@
 
         // console.log("called", timeline.translate, timeline.lineLength)
 
-        var desktop = window.matchMedia("(min-width: 1024px)")
-        if (desktop.matches) {
+        if (timeline.isDesktop) {
             // desktop js
             // Right Bound
             if (timeline.translate < 0) {
                 if (timeline.translate * -1 + timeline.eventsDistance > timeline.lineLength) {
                     // don't let last element extend left of middle of the screen
                     timeline.translate = before;
-                    console.log(timeline.translate);
+                    // console.log(timeline.translate);
                 } else {
-                    console.log(timeline.translate);
-                    console.log(timeline.lineLength);
-                    console.log(timeline.date.length);
+                    // console.log(timeline.translate);
                     timeline.line.style.transform = 'translateX(' + timeline.translate + 'px)';
                     // update the navigation items status (toggle inactive class)
                     // handle left side nav arrow status
@@ -151,6 +166,28 @@
         Util.addClass(timeline.date[timeline.newDateIndex], 'cd-h-timeline__date--selected');
         timeline.selectedDate = timeline.date[timeline.newDateIndex];
         updateVisibleContent(timeline);
+        // console.log(timeline.newDateIndex);
+        // console.log(timeline.oldDateIndex);
+        var newDate = timeline.newDateIndex + 1;
+        var oldDate = timeline.oldDateIndex + 1;
+        var amountToTranslate = Math.abs(newDate - oldDate);
+        if (timeline.newDateIndex > timeline.oldDateIndex) {
+            if (amountToTranslate === 1) {
+                translateTimeline(timeline, "next");
+            } else {
+                for (var i = 0; i < amountToTranslate; i++) {
+                    translateTimeline(timeline, "next");
+                }
+            }
+        } else {
+            if (amountToTranslate === 1) {
+                translateTimeline(timeline, "prev");
+            } else {
+                for (var i = 0; i < amountToTranslate; i++) {
+                    translateTimeline(timeline, "prev");
+                }
+            }
+        }
     };
 
     // show content of new selected date
