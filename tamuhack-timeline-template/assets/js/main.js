@@ -13,7 +13,8 @@
         this.contentWrapper = this.element.getElementsByClassName('cd-h-timeline__events')[0];
         this.content = this.contentWrapper.getElementsByClassName('cd-h-timeline__event');
 
-        this.eventsDistance = 190; // distance between events, 360 = 3 events on timeline, 190 = 5 events, NOTE: changing this size MAY need to reconfigure initial left in initTimeline()
+        // 360 = 3 on desktop-tablet, 190 = 5 on desktop and 3 on tablet, ALL have 1 on mobile
+        this.eventsDistance = 190; // distance between events
         this.isDesktop = false;
         this.view = window.matchMedia("(min-width: 1024px)");
         if (this.view.matches) {
@@ -35,10 +36,8 @@
     function initTimeline(timeline) {
         // set dates left position
         // first element offset
-        // the * 2 comes from 5 elements showing, and the first element to be centered must have 2 invisi elements to the left
-        // this will change depending on timeline.eventsDistance
-        // if eventsDistance = 360, then 2 can just be 1
-        var left = timeline.eventsDistance * 2;
+        // 5 is arbitrary, just needed enough left and right padding to translate timeline well
+        var left = timeline.eventsDistance * 5;
 
         for (var i = 0; i < timeline.date.length; i++) {
             left += timeline.eventsDistance;
