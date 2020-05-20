@@ -1,16 +1,55 @@
 /* HACKATHON LOGOS */
 
-.th::after {
+.th14::after {
+    background-image: url("../img/tamuhack14.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.th15::after {
+    background-image: url("../img/tamuhack15.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.th16::after {
+    background-image: url("../img/tamuhack16.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.th18::after {
+    background-image: url("../img/tamuhack18.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.hh18::after {
+    background-image: url("../img/howdyhack18.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.th19::after {
     background-image: url("../img/tamuhack19.svg");
     background-repeat: no-repeat;
     background-position: center center;
 }
 
-.hh::after {
-    background-image: url("../img/howdyhack18.svg");
+.hh19::after {
+    background-image: url("../img/howdyhack19.svg");
     background-repeat: no-repeat;
     background-position: center center;
 }
+
+.th20::after {
+    background-image: url("../img/tamuhack20.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+
+/* END HACKATHON LOGOS */
 
 .no-list-style {
     list-style: none;
