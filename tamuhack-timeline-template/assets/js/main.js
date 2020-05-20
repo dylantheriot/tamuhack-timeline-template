@@ -13,11 +13,10 @@
         this.contentWrapper = this.element.getElementsByClassName('cd-h-timeline__events')[0];
         this.content = this.contentWrapper.getElementsByClassName('cd-h-timeline__event');
 
-        this.eventsDistance = 360; // distance between events, 360 = 3 events on timeline for tablets and smaller
+        this.eventsDistance = 190; // distance between events, 360 = 3 events on timeline, 190 = 5 events
         this.isDesktop = false;
         this.view = window.matchMedia("(min-width: 1024px)");
         if (this.view.matches) {
-            this.eventsDistance = 200; // five on timeline for anything bigger
             this.isDesktop = true;
         }
 
@@ -35,10 +34,8 @@
     function initTimeline(timeline) {
         // set dates left position
         // first element offset
-        var left = timeline.eventsDistance;
-        if (timeline.isDesktop) {
-            left = timeline.eventsDistance * 2;
-        }
+        var left = timeline.eventsDistance * 2;
+
         for (var i = 0; i < timeline.date.length; i++) {
             left += timeline.eventsDistance;
             // set offset inbetw each element
@@ -240,7 +237,7 @@
         }
     };
 
-    window.HorizontalTimeline = HorizontalTimeline;
+    // window.HorizontalTimeline = HorizontalTimeline;
 
     var horizontalTimeline = document.getElementsByClassName('js-cd-h-timeline'),
         horizontalTimelineTimelineArray = [];
