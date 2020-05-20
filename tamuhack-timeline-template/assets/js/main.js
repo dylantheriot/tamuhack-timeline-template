@@ -138,12 +138,16 @@
                 } else {
                     // console.log(timeline.translate);
                     timeline.line.style.transform = 'translateX(' + timeline.translate + 'px)';
+
+                    // OLD WAY, keeping for potential reference in future
+                    // new way found in selectNewDate() function
                     // update the navigation items status (toggle inactive class)
                     // handle left side nav arrow status
-                    (timeline.translate * -1 < timeline.eventsDistance) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
+                    // (timeline.translate * -1 < timeline.eventsDistance) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
 
                     // handle right side nav arrow status
-                    (timeline.translate * -1 + timeline.eventsDistance > timeline.date.length * timeline.eventsDistance) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
+                    // OLD WAY, keeping for potential reference in future
+                    // (timeline.translate * -1 + timeline.eventsDistance > timeline.date.length * timeline.eventsDistance) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
                 }
             } else {
                 timeline.translate = before;
@@ -161,10 +165,6 @@
                 } else {
                     // console.log(timeline.translate);
                     timeline.line.style.transform = 'translateX(' + timeline.translate + 'px)';
-                    // update the navigation items status (toggle inactive class)
-                    // mobile doesn't need
-                    // (timeline.translate == 0) ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
-                    // (timeline.translate == containerWidth - timeline.lineLength) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
                 }
             } else {
                 timeline.translate = before;
@@ -181,6 +181,13 @@
         Util.addClass(timeline.date[timeline.newDateIndex], 'cd-h-timeline__date--selected');
         timeline.selectedDate = timeline.date[timeline.newDateIndex];
         updateVisibleContent(timeline);
+
+        // toggle left and right navigation
+        // handle left side nav arrow status
+        timeline.newDateIndex === 0 ? Util.addClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive') : Util.removeClass(timeline.navigation[0], 'cd-h-timeline__navigation--inactive');
+
+        // handle right side nav arrow status
+        (timeline.newDateIndex === timeline.date.length - 1) ? Util.addClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive'): Util.removeClass(timeline.navigation[1], 'cd-h-timeline__navigation--inactive');
 
         // determine distance to translate
         var newDate = timeline.newDateIndex + 1;
